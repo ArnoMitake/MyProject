@@ -27,7 +27,7 @@ public class JwtUtil {
     private JwtUtil() {
     }
 
-    public static JwtUtil jwtUtil;
+    private static JwtUtil jwtUtil;
 
     public static synchronized JwtUtil getInstance() {
         return  jwtUtil == null ? new JwtUtil() : jwtUtil;

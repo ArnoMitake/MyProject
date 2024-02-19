@@ -10,6 +10,7 @@ public class CoLineApiModel extends BaseModel {
     class Data extends BaseModel {
         public ArrayList<User> users;
         public String next;
+        public String event_id;
 
         class User extends BaseModel {
             public String user_id;
