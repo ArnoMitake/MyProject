@@ -1,6 +1,7 @@
 package utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -13,6 +14,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 public class HttpClientUtil { //目前用 Instance 暫時手動關閉 implements Closeable
@@ -49,6 +51,9 @@ public class HttpClientUtil { //目前用 Instance 暫時手動關閉 implements
             httpClient = HttpClients.createDefault();
 
             response = httpClient.execute(httpPost);
+
+            Arrays.stream(response.getAllHeaders())
+                    .forEach(System.out::println);
 
             if (response.getStatusLine().getStatusCode() == 200) {
                 return EntityUtils.toString(response.getEntity());
@@ -87,6 +92,9 @@ public class HttpClientUtil { //目前用 Instance 暫時手動關閉 implements
             httpClient = HttpClients.createDefault();
 
             response = httpClient.execute(httpGet);
+
+            Arrays.stream(response.getAllHeaders())
+                    .forEach(System.out::println);
 
             if (response.getStatusLine().getStatusCode() == 200) {
                 entity = response.getEntity();

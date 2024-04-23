@@ -7,12 +7,12 @@ public class CoLineApiModel extends BaseModel {
     public boolean success;
     public String message;
 
-    class Data extends BaseModel {
+    public class Data extends BaseModel {
         public ArrayList<User> users;
         public String next;
         public String event_id;
 
-        class User extends BaseModel {
+        public class User extends BaseModel {
             public String user_id;
             public String name;
             public String nickname;

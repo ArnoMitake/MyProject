@@ -89,8 +89,11 @@ public class JwtUtil {
         Jws<Claims> jws = JwtUtil.getInstance().parseJWT(jwt);
         System.out.println("parseJWT jws : " + jws);
 
-        String webhookJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJDT0xJTkUiLCJleHAiOjE3MDgwNjM4NjQ0NjF9.gIsmKbkP8EIXT8zBTnyPMeupyNWLq246liKTkU9xTS4";
-        Jws<Claims> webhookJws = JwtUtil.getInstance().parseJWT(webhookJwt);
-        System.out.println("parseJWT webhookJws : " + webhookJws);
+        String webhookJwt = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJDT0xJTkUiLCJleHAiOjE3MDgwNjM4NjQ0NjF9.gIsmKbkP8EIXT8zBTnyPMeupyNWLq246liKTkU9xTS4";
+        if(webhookJwt != null && webhookJwt.startsWith("Bearer ")){
+            webhookJwt = webhookJwt.substring("Bearer ".length());
+            Jws<Claims> webhookJws = JwtUtil.getInstance().parseJWT(webhookJwt);
+            System.out.println("parseJWT webhookJws : " + webhookJws);
+        }
     }
 }
