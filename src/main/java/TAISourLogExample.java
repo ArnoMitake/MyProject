@@ -13,7 +13,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import model.ChtSMSourLogModel;
+import Example.DatabaseConnectionExample;
 import model.TaiSMSourLogModel;
 
 public class TAISourLogExample {
