@@ -1,3 +1,5 @@
+package LogTools;
+
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.io.BufferedReader;
