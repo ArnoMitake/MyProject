@@ -15,7 +15,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import Example.DatabaseConnectionExample;
+import dao.DatabaseConnection;
 import model.TaiSMSourLogModel;
 
 public class TAISourLogExample {
@@ -50,7 +50,7 @@ public class TAISourLogExample {
         System.out.println(" SmSourLogExample Start >>>>>>>>>>>>>>>> ");
         List<TaiSMSourLogModel> models = new ArrayList<>();
         parseFolder(new File(folderPath), models);
-        DatabaseConnectionExample.doTaiDatabaseConnectionExample(DB_ip, DB_port, DB_dbname, DB_user, DB_num, models);
+        DatabaseConnection.doTaiDatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num, models);
         System.out.println(" SmSourLogExample End <<<<<<<<<<<<<<<<< ");
         sw.stop();
         System.out.println("SmSourLogExample run time :" + sw.getTime() + "ms");

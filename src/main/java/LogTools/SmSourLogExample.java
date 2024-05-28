@@ -15,7 +15,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import Example.DatabaseConnectionExample;
+import dao.DatabaseConnection;
 import model.ChtSMSourLogModel;
 
 public class SmSourLogExample {
@@ -45,12 +45,13 @@ public class SmSourLogExample {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
+        DatabaseConnection conn = new DatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num);
         StopWatch sw = new StopWatch();
         sw.start();
         System.out.println(" SmSourLogExample Start >>>>>>>>>>>>>>>> ");
         List<ChtSMSourLogModel> models = new ArrayList<>();
-        parseFolder(new File(folderPath), models);
-        DatabaseConnectionExample.doDatabaseConnectionExample(DB_ip, DB_port, DB_dbname, DB_user, DB_num, models);
+//        parseFolder(new File(folderPath), models);
+        conn.doDatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num, models);
         System.out.println(" SmSourLogExample End <<<<<<<<<<<<<<<<< ");
         sw.stop();
         System.out.println("SmSourLogExample run time :" + sw.getTime() + "ms");

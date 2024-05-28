@@ -1,20 +1,38 @@
-package Example;
+package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
+import com.microsoft.sqlserver.jdbc.SQLServerConnection;
+import com.microsoft.sqlserver.jdbc.SQLServerDataTable;
+import com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+
+import javax.sql.DataSource;
+
 import model.ChtSMSourLogModel;
 import model.TaiSMSourLogModel;
+import model.TvpModel;
 
-public class DatabaseConnectionExample {
-    public static void doDatabaseConnectionExample(String ip, String port, String dbname, String user, String num, List<ChtSMSourLogModel> models) {
+public class DatabaseConnection extends JdbcTemplate {
+
+    private HikariConfig hikariConfig = null;
+    private HikariDataSource hikariDataSource = null;
+    private String ip;
+    private String port;
+    private String dbName;
+    private String user;
+    private String passWord;
+
+    public static void doDatabaseConnection(String ip, String port, String dbname, String user, String num, List<ChtSMSourLogModel> models) {
 
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(
@@ -27,7 +45,6 @@ public class DatabaseConnectionExample {
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
             preparedStatement = connection.prepareStatement(
@@ -50,8 +67,6 @@ public class DatabaseConnectionExample {
             e.printStackTrace();
         } finally {
             try {
-                if (resultSet != null)
-                    resultSet.close();
                 if (preparedStatement != null)
                     preparedStatement.close();
                 if (connection != null)
@@ -64,7 +79,7 @@ public class DatabaseConnectionExample {
         }
     }
 
-    public static void doTaiDatabaseConnectionExample(String ip, String port, String dbname, String user, String num, List<TaiSMSourLogModel> models) {
+    public static void doTaiDatabaseConnection(String ip, String port, String dbname, String user, String num, List<TaiSMSourLogModel> models) {
 
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(
@@ -77,7 +92,6 @@ public class DatabaseConnectionExample {
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
             preparedStatement = connection.prepareStatement(
@@ -99,9 +113,7 @@ public class DatabaseConnectionExample {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (resultSet != null)
-                    resultSet.close();
+            try {                
                 if (preparedStatement != null)
                     preparedStatement.close();
                 if (connection != null)
@@ -113,4 +125,76 @@ public class DatabaseConnectionExample {
             }
         }
     }
+    
+    public int batchInsertTvpTest(List<TvpModel> tvpModels) {
+        int result = -1;
+        DataSource ds = null;
+        Connection conn = null;
+        Connection nativeConn = null;
+        SQLServerDataTable sourceDataTable = null;
+        SQLServerPreparedStatement pStmt = null;
+                
+        StringBuilder sql = new StringBuilder();
+        //資料會被撈走
+        sql.append(" INSERT INTO SMDR.dbo.SM0001(Data, Stamp) ");
+        sql.append(" SELECT Data, Stamp FROM ? ");
+        
+        try {
+            ds = this.hikariDataSource;
+            conn = DataSourceUtils.doGetConnection(ds);
+            nativeConn = conn.unwrap(SQLServerConnection.class);
+            
+            if (tvpModels != null && !tvpModels.isEmpty()) {
+                pStmt = (SQLServerPreparedStatement) nativeConn.prepareStatement(sql.toString());
+                
+                sourceDataTable = new SQLServerDataTable();
+                sourceDataTable.addColumnMetadata("Data", java.sql.Types.CHAR);
+                sourceDataTable.addColumnMetadata("Stamp", java.sql.Types.TIMESTAMP);
+
+                for (TvpModel model : tvpModels) {
+                    sourceDataTable.addRow(model.getData(), new Timestamp(System.currentTimeMillis()));
+                }
+
+                pStmt.setStructured(1, "dbo.SM0001Type", sourceDataTable);
+
+                result = pStmt.executeUpdate();
+
+                pStmt.clearParameters();
+                sourceDataTable.clear();
+            }            
+        } catch (SQLException e) {
+            throw new RuntimeException("batchInsertTvpTest fail", e);
+        } finally {
+            DataSourceUtils.releaseConnection(conn, ds);
+        }        
+        return result;
+    }
+
+
+    public DatabaseConnection(String ip, String port, String dbName, String user, String passWord) {
+        this.ip = ip;
+        this.port = port;
+        this.dbName = dbName;
+        this.user = user;
+        this.passWord = passWord;
+        DatabaseConnectionConfig();
+    }
+
+    private void DatabaseConnectionConfig() {
+        if (hikariConfig == null) {
+            hikariConfig = new HikariConfig();            
+        }
+        StringBuilder jdbcUrl = new StringBuilder();
+        jdbcUrl.append("jdbc:sqlserver://").append(ip).append(":").append(port).append(";");
+        jdbcUrl.append("databaseName=").append(dbName).append(";");
+        jdbcUrl.append("applicationName=SmSourLogExample;sendStringParametersAsUnicode=false;ColumnEncryptionSetting=Enabled;");
+
+        hikariConfig.setJdbcUrl(jdbcUrl.toString());
+        hikariConfig.setUsername(this.user);
+        hikariConfig.setPassword(this.passWord);
+
+        hikariDataSource = new HikariDataSource(hikariConfig);
+
+    }
+
 }
