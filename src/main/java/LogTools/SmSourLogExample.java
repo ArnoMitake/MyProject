@@ -50,8 +50,8 @@ public class SmSourLogExample {
         sw.start();
         System.out.println(" SmSourLogExample Start >>>>>>>>>>>>>>>> ");
         List<ChtSMSourLogModel> models = new ArrayList<>();
-//        parseFolder(new File(folderPath), models);
-        conn.doDatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num, models);
+        parseFolder(new File(folderPath), models);
+        conn.doSmSourLogDatabaseConnection(models);
         System.out.println(" SmSourLogExample End <<<<<<<<<<<<<<<<< ");
         sw.stop();
         System.out.println("SmSourLogExample run time :" + sw.getTime() + "ms");
@@ -61,9 +61,10 @@ public class SmSourLogExample {
         Pattern pattern = Pattern.compile("SMSourCHT(\\d{4})");
         try {
             for (File parent : folder.listFiles()) {
-                if (parent.exists() && parent.getName().contains(".")) {
+                if (parent.exists() && parent.getName().contains(".")) {                    
                     for (File child : parent.listFiles()) {
                         Matcher matcher = pattern.matcher(child.getName());
+                        if(models != null && models.size() > 1)return;
                         if (matcher.find()) {
                             parseLog(parent.getName(), child.getPath(), matcher.group(1), models);
                         }

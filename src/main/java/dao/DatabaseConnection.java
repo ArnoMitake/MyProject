@@ -32,98 +32,63 @@ public class DatabaseConnection extends JdbcTemplate {
     private String user;
     private String passWord;
 
-    public static void doDatabaseConnection(String ip, String port, String dbname, String user, String num, List<ChtSMSourLogModel> models) {
+	public void doSmSourLogDatabaseConnection(List<ChtSMSourLogModel> chtSMSourLogModels) {
+		int[] result = null;
+		StringBuilder sql = new StringBuilder();
 
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(
-                "jdbc:sqlserver://"+ ip + ":" + port + ";databaseName=" + dbname + ";applicationName=SmSourLogExample;sendStringParametersAsUnicode=false;ColumnEncryptionSetting=Enabled;");
+		sql.append(" INSERT INTO LOG.dbo.Cht_SMSourLog (Date, Time, Ip, PartKey, Mid, SessionId) ");
+		sql.append(" VALUES (?, ? ,? ,? ,? ,?) ");
 
-        config.setUsername(user);
-        config.setPassword(num);
+		try (Connection conn = (DataSourceUtils.doGetConnection(this.hikariDataSource))
+				.unwrap(SQLServerConnection.class);
+				SQLServerPreparedStatement pStmt = (SQLServerPreparedStatement) conn.prepareStatement(sql.toString())) {
 
-        HikariDataSource dataSource = new HikariDataSource(config);
+			for (ChtSMSourLogModel model : chtSMSourLogModels) {
+				pStmt.setString(1, model.getDate());
+				pStmt.setString(2, model.getTime());
+				pStmt.setString(3, model.getIp());
+				pStmt.setString(4, model.getPartKey());
+				pStmt.setString(5, model.getMid());
+				pStmt.setString(6, model.getSessionId());
+				pStmt.addBatch();
+			}
+			result = pStmt.executeBatch();
 
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement(
-                    "INSERT INTO LOG.dbo.Cht_SMSourLog (Date, Time, Ip, PartKey, Mid, SessionId)" +
-                            " VALUES (?, ? ,? ,? ,? ,?)");
+			pStmt.clearParameters();
+		} catch (SQLException e) {
+			throw new RuntimeException("doSmSourLogDatabaseConnection fail", e);
+		}
+		System.out.println("count: " + Arrays.stream(result).sum());
+	}
 
-            for (ChtSMSourLogModel model : models) {
-                preparedStatement.setString(1, model.getDate());
-                preparedStatement.setString(2, model.getTime());
-                preparedStatement.setString(3, model.getIp());
-                preparedStatement.setString(4, model.getPartKey());
-                preparedStatement.setString(5, model.getMid());
-                preparedStatement.setString(6, model.getSessionId());
-                preparedStatement.addBatch();
-            }
+    public void doTaiDatabaseConnection(List<TaiSMSourLogModel> models) {
+        int[] result = null;
+        StringBuilder sql = new StringBuilder();
 
-            int[] batchResult = preparedStatement.executeBatch();
-            System.out.println("count: " + Arrays.stream(batchResult).sum());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null)
-                    preparedStatement.close();
-                if (connection != null)
-                    connection.close();
-                dataSource.close();
-            } catch (SQLException e) {
-                System.out.println(e);
-                e.printStackTrace();
-            }
-        }
-    }
+        sql.append(" INSERT INTO LOG.dbo.Tai_SMSourLog (Date, Time, ThreadID, SerialNo, Mid, ExecutionTime) ");
+        sql.append(" VALUES (?, ? ,? ,? ,? ,?) ");
 
-    public static void doTaiDatabaseConnection(String ip, String port, String dbname, String user, String num, List<TaiSMSourLogModel> models) {
-
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(
-                "jdbc:sqlserver://"+ ip + ":" + port + ";databaseName=" + dbname + ";applicationName=SmSourLogExample;sendStringParametersAsUnicode=false;ColumnEncryptionSetting=Enabled;");
-
-        config.setUsername(user);
-        config.setPassword(num);
-
-        HikariDataSource dataSource = new HikariDataSource(config);
-
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement(
-                    "INSERT INTO LOG.dbo.Tai_SMSourLog (Date, Time, ThreadID, SerialNo, Mid, ExecutionTime)" +
-                            " VALUES (?, ? ,? ,? ,? ,?)");
-
+        try (Connection conn = (DataSourceUtils.doGetConnection(this.hikariDataSource))
+                .unwrap(SQLServerConnection.class);
+             SQLServerPreparedStatement pStmt = (SQLServerPreparedStatement) conn.prepareStatement(sql.toString())) {
+            
             for (TaiSMSourLogModel model : models) {
-                preparedStatement.setString(1, model.getDate());
-                preparedStatement.setString(2, model.getTime());
-                preparedStatement.setString(3, model.getThreadID());
-                preparedStatement.setString(4, model.getSerialNo());
-                preparedStatement.setString(5, model.getMid());
-                preparedStatement.setString(6, model.getExecutionTime());
-                preparedStatement.addBatch();
+                pStmt.setString(1, model.getDate());
+                pStmt.setString(2, model.getTime());
+                pStmt.setString(3, model.getThreadID());
+                pStmt.setString(4, model.getSerialNo());
+                pStmt.setString(5, model.getMid());
+                pStmt.setString(6, model.getExecutionTime());
+                pStmt.addBatch();
             }
 
-            int[] batchResult = preparedStatement.executeBatch();
-            System.out.println("count: " + Arrays.stream(batchResult).sum());
+            result = pStmt.executeBatch();
+            
+            pStmt.clearParameters();            
         } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {                
-                if (preparedStatement != null)
-                    preparedStatement.close();
-                if (connection != null)
-                    connection.close();
-                dataSource.close();
-            } catch (SQLException e) {
-                System.out.println(e);
-                e.printStackTrace();
-            }
+            throw new RuntimeException("doTaiDatabaseConnection fail", e);
         }
+        System.out.println("count: " + Arrays.stream(result).sum());
     }
     
     public int batchInsertTvpTest(List<TvpModel> tvpModels) {
