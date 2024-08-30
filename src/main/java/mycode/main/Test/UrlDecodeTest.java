@@ -8,6 +8,11 @@ import org.apache.commons.codec.binary.Hex;
 
 import jodd.net.URLCoder;
 
+/**
+ * 工具說明:
+ * 主要是針對不同編碼做簡訊發送的 request
+ * hexEncodeString: 部分內容編碼
+ */
 public class UrlDecodeTest {
     public static void main(String[] args) throws UnsupportedEncodingException, DecoderException {
         String encodeStr = "UTF-16BE";

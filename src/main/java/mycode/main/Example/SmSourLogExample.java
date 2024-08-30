@@ -43,32 +43,32 @@ public class SmSourLogExample {
         System.out.println(" SmSourLogExample Start >>>>>>>>>>>>>>>> ");
         List<ChtSMSourLogModel> models = new ArrayList<>();
         
-        parseFolder(new File(propertiesModel.getFolderPath()), models);
-        
-        dao.doSmSourLogDatabaseConnection(models);
+        parseFolder(new File(propertiesModel.getFolderPath()).listFiles(), models, Pattern.compile("SMSourCHT(\\d{4})"));
+
+//        dao.doSmSourLogDatabaseConnection(models);
         
         System.out.println(" SmSourLogExample End <<<<<<<<<<<<<<<<< ");
         sw.stop();
         System.out.println("SmSourLogExample run time :" + sw.getTime() + "ms");
     }
-
-    public static void parseFolder(File folder, List<ChtSMSourLogModel> models) {
-        Pattern pattern = Pattern.compile("SMSourCHT(\\d{4})");
-        try {
-            for (File parent : folder.listFiles()) {
-                if (parent.exists() && parent.getName().contains(".")) {                    
-                    for (File child : parent.listFiles()) {
-                        Matcher matcher = pattern.matcher(child.getName());
-                        if(models != null && models.size() > 1)return;
-                        if (matcher.find()) {
-                            parseLog(parent.getName(), child.getPath(), matcher.group(1), models);
-                        }
-                    }
+    
+    //遞迴
+    public static void parseFolder(File[] files, List<ChtSMSourLogModel> models, Pattern pattern) {
+        for (File file : files) {
+            //是目錄且名稱包含"." 
+            if (file.exists() && file.isDirectory() && file.getName().contains(".")) {
+                parseFolder(file.listFiles(), models, pattern);
+            //是檔案
+            } else if (file.exists() && file.isFile()) {
+                Matcher matcher = pattern.matcher(file.getName());
+                if (matcher.find()) {
+                    try {
+                        parseLog(file.getParentFile().getName(), file.getPath(), matcher.group(1), models);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }                    
                 }
             }
-        } catch (IOException e) {
-            System.out.println(e);
-            e.printStackTrace();
         }
     }
 

@@ -44,32 +44,33 @@ public class TAISourLogExample {
         System.out.println(" SmSourLogExample Start >>>>>>>>>>>>>>>> ");
         List<TaiSMSourLogModel> models = new ArrayList<>();
         
-        parseFolder(new File(propertiesModel.getFolderPath()), models);
+        parseFolder(new File(propertiesModel.getFolderPath()).listFiles(), models, Pattern.compile(regex));
         
-        dao.doTaiDatabaseConnection(models);
+//        dao.doTaiDatabaseConnection(models);
         
         System.out.println(" SmSourLogExample End <<<<<<<<<<<<<<<<< ");
         sw.stop();
         System.out.println("SmSourLogExample run time :" + sw.getTime() + "ms");
     }
 
-    public static void parseFolder(File folder, List<TaiSMSourLogModel> models) {
-        Pattern pattern = Pattern.compile(regex);//匹配檔案名稱
-        try {
-            for (File parent : folder.listFiles()) {
-                if (parent.exists() && parent.getName().contains(".")) {//找帶有.的資料夾
-                    for (File child : parent.listFiles()) {
-                        Matcher matcher = pattern.matcher(child.getName());
-                        if (matcher.find()) {
-                            parseLog(parent.getName(), child.getPath(), matcher.group(1), models);
-                            System.out.println("Folder : " + parent.getName() + " LogName: " + child.getName() + ": 總數: " + models.size());
-                        }
-                    }
+    public static void parseFolder(File[] files, List<TaiSMSourLogModel> models, Pattern pattern) {
+        for (File file : files) {
+            //是目錄且名稱包含("."，"ok") 
+            if (file.exists() && file.isDirectory() && 
+                    (file.getName().contains(".") || file.getName().contains("ok"))) {
+                parseFolder(file.listFiles(), models, pattern);
+            //是檔案
+            } else if (file.exists() && file.isFile()) {
+                Matcher matcher = pattern.matcher(file.getName());
+                if (matcher.find()) {
+                    try {
+                        parseLog(file.getParentFile().getName(), file.getPath(), matcher.group(1), models);
+//                        System.out.println("Folder : " + file.getParentFile().getName() + " LogName: " + file.getName() + ": 總數: " + models.size());
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }                    
                 }
             }
-        } catch (IOException e) {
-            System.out.println(e);
-            e.printStackTrace();
         }
     }
 

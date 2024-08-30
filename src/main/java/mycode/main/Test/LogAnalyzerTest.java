@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 解析 Log
+ */
 public class LogAnalyzerTest {
 
     private final static String folderPath = "D:\\Program Files\\SourceTree\\Java_Project\\Github\\MyProject\\for_LogAnalyzer_demo\\smpp_nginx_log\\smpp_nginx\\123.16";

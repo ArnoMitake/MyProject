@@ -13,6 +13,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 多執行續讀、寫圖片檔(壓測用)
+ */
 public class MultiThreadFileWriterTest {
 
     private static final String FILE_PATH = "Camels_output2.txt";

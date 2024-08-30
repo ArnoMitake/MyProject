@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * WPF 遞迴結構生成樹
+ */
 public class TreeViewTest {
 
     public static void main(String[] args) {
