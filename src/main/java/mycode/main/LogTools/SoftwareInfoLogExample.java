@@ -1,4 +1,4 @@
-package LogTools;
+package mycode.main.LogTools;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,8 +14,8 @@ import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
-import dao.DatabaseConnection;
-import model.SoftwareInfoModel;
+import mycode.dao.DatabaseConnection;
+import mycode.model.SoftwareInfoModel;
 
 /**
  * 資料來源參考: 主機上安裝軟體清查

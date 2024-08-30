@@ -1,4 +1,4 @@
-package Example;
+package mycode.main.Example;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import dao.DatabaseConnection;
-import model.TvpModel;
+import mycode.dao.DatabaseConnection;
+import mycode.model.TvpModel;
 
 /**
  * 測試 Tvp 的範例

@@ -1,4 +1,4 @@
-package model;
+package mycode.model;
 
 public class TvpModel extends BaseModel {
     private String data;

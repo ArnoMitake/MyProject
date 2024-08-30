@@ -1,4 +1,4 @@
-package Example;
+package mycode.main.Example;
 
 import org.springframework.util.StopWatch;
 

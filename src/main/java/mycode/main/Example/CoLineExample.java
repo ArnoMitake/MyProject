@@ -1,4 +1,4 @@
-package Example;
+package mycode.main.Example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -10,9 +10,9 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.CoLineApiModel;
-import utils.HttpClientUtil;
-import utils.JwtUtil;
+import mycode.model.CoLineApiModel;
+import mycode.utils.HttpClientUtil;
+import mycode.utils.JwtUtil;
 
 /**
  * 1. 排程 -> 每天更新一次 CoLine 取得成員資訊 Table (insert or update)

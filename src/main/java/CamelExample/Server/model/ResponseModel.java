@@ -1,6 +1,6 @@
 package CamelExample.Server.model;
 
-import model.BaseModel;
+import mycode.model.BaseModel;
 
 public class ResponseModel extends BaseModel {
 	private String magicid;

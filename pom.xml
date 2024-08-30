@@ -244,7 +244,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <configuration>
-                    <mainClass>Example.FtpExample</mainClass>
+                    <mainClass>mycode.main.Example.FtpExample</mainClass>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,4 +1,4 @@
-package dao;
+package mycode.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,10 +17,10 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
 
-import model.ChtSMSourLogModel;
-import model.SoftwareInfoModel;
-import model.TaiSMSourLogModel;
-import model.TvpModel;
+import mycode.model.ChtSMSourLogModel;
+import mycode.model.SoftwareInfoModel;
+import mycode.model.TaiSMSourLogModel;
+import mycode.model.TvpModel;
 
 public class DatabaseConnection extends JdbcTemplate {
     private HikariConfig hikariConfig = null;

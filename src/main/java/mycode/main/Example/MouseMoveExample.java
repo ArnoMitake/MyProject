@@ -1,4 +1,4 @@
-package Example;
+package mycode.main.Example;
 
 import java.awt.Robot;
 import java.time.Duration;

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import CamelExample.Server.model.RequestModel;
 import CamelExample.Server.model.ResponseModel;
-import model.BaseModel;
+import mycode.model.BaseModel;
 
 /**
  * http://127.0.0.1:7777/callbackurl?msgid=A0000000013&dstaddr=85236690084&dlvtime=20240617144526&donetime=20240617144526&statusstr=DELIVRD&statuscode=0&StatusFlag=4

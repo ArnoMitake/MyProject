@@ -1,4 +1,4 @@
-package LogTools;
+package mycode.main.LogTools;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;

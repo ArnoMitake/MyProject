@@ -1,4 +1,4 @@
-package model;
+package mycode.model;
 
 public class TaiSMSourLogModel extends BaseModel {
     public TaiSMSourLogModel() {

@@ -1,4 +1,4 @@
-package LogTools;
+package mycode.main.LogTools;
 
 import org.apache.commons.lang3.time.StopWatch;
 
@@ -15,8 +15,8 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dao.DatabaseConnection;
-import model.TaiSMSourLogModel;
+import mycode.dao.DatabaseConnection;
+import mycode.model.TaiSMSourLogModel;
 
 public class TAISourLogExample {
     private static String regex = "SMSourTAI(\\d{4})";
