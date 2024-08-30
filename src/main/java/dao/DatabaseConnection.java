@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -19,11 +18,11 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 import javax.sql.DataSource;
 
 import model.ChtSMSourLogModel;
+import model.SoftwareInfoModel;
 import model.TaiSMSourLogModel;
 import model.TvpModel;
 
 public class DatabaseConnection extends JdbcTemplate {
-
     private HikariConfig hikariConfig = null;
     private HikariDataSource hikariDataSource = null;
     private String ip;
@@ -135,6 +134,33 @@ public class DatabaseConnection extends JdbcTemplate {
         return result;
     }
 
+    public void batchInsertSoftwareInfoData(List<SoftwareInfoModel> softwareInfoModels) {
+        int[] result = null;
+        StringBuilder sql = new StringBuilder();
+
+        sql.append(" INSERT INTO DBexp.dbo.SoftwareInfo(Ip, Name, Version, Description) ");
+        sql.append(" VALUES (?, ? ,? ,?) ");
+
+        try (Connection conn = (DataSourceUtils.doGetConnection(this.hikariDataSource))
+                .unwrap(SQLServerConnection.class);
+             SQLServerPreparedStatement pStmt = (SQLServerPreparedStatement) conn.prepareStatement(sql.toString())) {
+
+            for (SoftwareInfoModel model : softwareInfoModels) {
+                pStmt.setString(1, model.getIp());
+                pStmt.setString(2, model.getName());
+                pStmt.setString(3, model.getVersion());
+                pStmt.setString(4, model.getDescription());
+                pStmt.addBatch();
+            }
+
+            result = pStmt.executeBatch();
+
+            pStmt.clearParameters();
+        } catch (SQLException e) {
+            throw new RuntimeException("batchInsertSoftwareInfoData fail", e);
+        }
+        System.out.println("count: " + Arrays.stream(result).sum());
+    }
 
     public DatabaseConnection(String ip, String port, String dbName, String user, String passWord) {
         this.ip = ip;

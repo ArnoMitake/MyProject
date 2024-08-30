@@ -4,12 +4,15 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 
+import java.io.File;
+
 public class FtpExample extends RouteBuilder {
     public static void main(String[] args) throws Exception {
-        CamelContext camelContext = new DefaultCamelContext();
-        camelContext.addRoutes(new FtpExample());
+        
+//        CamelContext camelContext = new DefaultCamelContext();
+//        camelContext.addRoutes(new FtpExample());
 
-        camelContext.start();
+//        camelContext.start();
         //Thread.sleep(10000);
         //camelContext.stop();
     }

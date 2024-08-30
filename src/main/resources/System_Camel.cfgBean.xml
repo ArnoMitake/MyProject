@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<import resource="System_Service.cfgBean.xml" />
+
+	<bean id="jetty" class="org.apache.camel.component.jetty9.JettyHttpComponent9">
+		<property name="threadPool">
+			<bean id="ThreadPool" class="org.eclipse.jetty.util.thread.QueuedThreadPool">
+				<property name="minThreads" value="5" />
+				<property name="maxThreads" value="150" />
+			</bean>
+		</property>
+		<property name="socketConnectorProperties">
+			<map>
+				<entry key="acceptors" value="4" />
+<!--				<entry key="idleTimeout" value="30000" />-->
+			</map>
+		</property>
+	</bean>
+
+
+	<camelContext id="MockServer" xmlns="http://camel.apache.org/schema/spring">
+
+		<!-- Common Exception -->
+		<onException>
+			<exception>java.lang.Exception</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<to uri="direct:errorHandler" />
+		</onException>
+        
+        <route id="jettyMockServer">
+            <from uri="jetty:http://0.0.0.0:7777/callbackurl?disableStreamCache=true&amp;traceEnabled=true"/>
+            <bean ref="JettyServerHandler" method="handle"/>
+        </route>
+		
+		<!-- 錯誤處理 -->
+		<route id="errorHandler">
+			<from uri="direct:errorHandler" />
+			<log message="錯誤訊息： ${exception.message}\r\n錯誤內容： ${exception.stacktrace}"
+				loggingLevel="ERROR" />
+		</route>
+	</camelContext>
+</beans>

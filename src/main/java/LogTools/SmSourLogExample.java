@@ -45,13 +45,13 @@ public class SmSourLogExample {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        DatabaseConnection conn = new DatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num);
+        DatabaseConnection dao = new DatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num);
         StopWatch sw = new StopWatch();
         sw.start();
         System.out.println(" SmSourLogExample Start >>>>>>>>>>>>>>>> ");
         List<ChtSMSourLogModel> models = new ArrayList<>();
         parseFolder(new File(folderPath), models);
-        conn.doSmSourLogDatabaseConnection(models);
+        dao.doSmSourLogDatabaseConnection(models);
         System.out.println(" SmSourLogExample End <<<<<<<<<<<<<<<<< ");
         sw.stop();
         System.out.println("SmSourLogExample run time :" + sw.getTime() + "ms");

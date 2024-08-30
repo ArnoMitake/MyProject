@@ -19,6 +19,7 @@ import dao.DatabaseConnection;
 import model.TaiSMSourLogModel;
 
 public class TAISourLogExample {
+    private static String regex = "SMSourTAI(\\d{4})";
     private static String keyWord;
     private static String folderPath;
     private static String DB_ip;
@@ -26,6 +27,7 @@ public class TAISourLogExample {
     private static String DB_dbname;
     private static String DB_user;
     private static String DB_num;
+    private static DatabaseConnection dao = null;
 
     static {
         Properties prop = new Properties();
@@ -39,26 +41,26 @@ public class TAISourLogExample {
             DB_dbname = prop.getProperty("tai_DB_dbname");
             DB_user = prop.getProperty("tai_DB_user");
             DB_num = prop.getProperty("tai_DB_num");
+            dao = new DatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        DatabaseConnection conn = new DatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num);
         StopWatch sw = new StopWatch();
         sw.start();
         System.out.println(" SmSourLogExample Start >>>>>>>>>>>>>>>> ");
         List<TaiSMSourLogModel> models = new ArrayList<>();
         parseFolder(new File(folderPath), models);
-        conn.doTaiDatabaseConnection(models);
+        dao.doTaiDatabaseConnection(models);
         System.out.println(" SmSourLogExample End <<<<<<<<<<<<<<<<< ");
         sw.stop();
         System.out.println("SmSourLogExample run time :" + sw.getTime() + "ms");
     }
 
     public static void parseFolder(File folder, List<TaiSMSourLogModel> models) {
-        Pattern pattern = Pattern.compile("SMSourTAI(\\d{4})");//匹配檔案名稱
+        Pattern pattern = Pattern.compile(regex);//匹配檔案名稱
         try {
             for (File parent : folder.listFiles()) {
                 if (parent.exists() && parent.getName().contains(".")) {//找帶有.的資料夾

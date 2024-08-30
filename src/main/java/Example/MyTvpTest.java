@@ -37,7 +37,7 @@ public class MyTvpTest {
     }
     
     public static void main(String[] args) {
-        DatabaseConnection conn = new DatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num);
+        DatabaseConnection dao = new DatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num);
         int result = -1;
         TvpModel model = null;
 		List<TvpModel> modelList = new ArrayList<>();
@@ -47,7 +47,7 @@ public class MyTvpTest {
             modelList.add(model);
 		}
 
-        result = conn.batchInsertTvpTest(modelList);
+        result = dao.batchInsertTvpTest(modelList);
 
         System.out.println("tvp新增結果: " + result);
      

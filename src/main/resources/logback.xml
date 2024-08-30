@@ -1,0 +1,43 @@
+<configuration>
+	<property name="Process" value="${app.global.name}:-." />
+	<property name="PID" value="0" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<Encoding>UTF-8</Encoding>
+		<encoder>
+			<pattern>
+				%d{yyyy/MM/dd HH:mm:ss.SSS} %-5level %logger{5}:%M:%L - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ConsoleLog" class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator>
+			<key>module</key>
+			<defaultValue>core</defaultValue>
+		</discriminator>
+		<sift>
+			<appender class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<file>logs/${Process}/${module}/ConsoleLog.log</file>
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<fileNamePattern>logs/${Process}/${module}/ConsoleLog.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+					<maxHistory>365</maxHistory>
+					<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+						<maxFileSize>10MB</maxFileSize>
+					</timeBasedFileNamingAndTriggeringPolicy>
+				</rollingPolicy>
+				<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+					<charset>UTF-8</charset>
+					<layout class="ch.qos.logback.classic.PatternLayout">
+						<pattern>%d{dd HH:mm:ss.SSS} [%thread] %-5level %logger{0}[%M - %L]- %msg%n</pattern>
+					</layout>
+				</encoder>
+			</appender>
+		</sift>
+	</appender>
+
+	<root level="info">
+		<appender-ref ref="ConsoleLog" />
+<!--		<appender-ref ref="STDOUT" />-->
+	</root>
+</configuration>

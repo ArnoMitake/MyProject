@@ -10,10 +10,10 @@ import jodd.net.URLCoder;
 
 public class UrlDecodeTest {
     public static void main(String[] args) throws UnsupportedEncodingException, DecoderException {
-        String encodeStr = "UTF-8";
+        String encodeStr = "UTF-16BE";
         System.out.println(hexEncodeString("108013", encodeStr));
         System.out.println(hexEncodeString("12345", encodeStr));
-        System.out.println(hexEncodeString("0987898789", encodeStr));
+        System.out.println(hexEncodeString("0977788978", encodeStr));
         System.out.println(hexEncodeString("Unicode簡訊發送測試test20240105", encodeStr));
 //        System.out.println(hexEncodeString("This is SpLmGet Test20240105  This is SpLmGet Test20240105  This is SpLmGet Test20240105  This is SpLmGet Test20240105  This is SpLmGet Test20240105  This is SpLmGet Test20240105  ", encodeStr));
 
@@ -21,7 +21,7 @@ public class UrlDecodeTest {
 
         System.out.println(URLCoder.encode("108013", Charset.forName(encodeStr)));
         System.out.println(URLCoder.encode("12345", Charset.forName(encodeStr)));
-        System.out.println(URLCoder.encode("0987898789", Charset.forName(encodeStr)));
+        System.out.println(URLCoder.encode("0977788978", Charset.forName(encodeStr)));
         System.out.println(URLCoder.encode("Unicode簡訊發送測試test20240105", Charset.forName(encodeStr)));
 //        System.out.println(URLCoder.encode("This is SpLmGet Test20240105  This is SpLmGet Test20240105  This is SpLmGet Test20240105  This is SpLmGet Test20240105  This is SpLmGet Test20240105  This is SpLmGet Test20240105  ", Charset.forName(encodeStr)));
 
