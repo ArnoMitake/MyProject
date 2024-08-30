@@ -1,12 +1,8 @@
-package mycode.main.Example;
+package mycode.main.Test;
 
-import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultCamelContext;
 
-import java.io.File;
-
-public class FtpExample extends RouteBuilder {
+public class FtpTest extends RouteBuilder {
     public static void main(String[] args) throws Exception {
         
 //        CamelContext camelContext = new DefaultCamelContext();

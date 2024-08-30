@@ -9,36 +9,30 @@ import java.util.List;
 import com.microsoft.sqlserver.jdbc.SQLServerConnection;
 import com.microsoft.sqlserver.jdbc.SQLServerDataTable;
 import com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
 
+import mycode.dao.Impl.DatabaseConnectionImpl;
 import mycode.model.ChtSMSourLogModel;
 import mycode.model.SoftwareInfoModel;
 import mycode.model.TaiSMSourLogModel;
 import mycode.model.TvpModel;
 
-public class DatabaseConnection extends JdbcTemplate {
-    private HikariConfig hikariConfig = null;
-    private HikariDataSource hikariDataSource = null;
-    private String ip;
-    private String port;
-    private String dbName;
-    private String user;
-    private String passWord;
+public class DatabaseConnection extends JdbcTemplate implements DatabaseConnectionImpl {
+    private DatabaseConnectionFactory databaseConnectionFactory;
 
-	public void doSmSourLogDatabaseConnection(List<ChtSMSourLogModel> chtSMSourLogModels) {
+    @Override
+    public void doSmSourLogDatabaseConnection(List<ChtSMSourLogModel> chtSMSourLogModels) {
 		int[] result = null;
 		StringBuilder sql = new StringBuilder();
 
 		sql.append(" INSERT INTO LOG.dbo.Cht_SMSourLog (Date, Time, Ip, PartKey, Mid, SessionId) ");
 		sql.append(" VALUES (?, ? ,? ,? ,? ,?) ");
 
-		try (Connection conn = (DataSourceUtils.doGetConnection(this.hikariDataSource))
+		try (Connection conn = (DataSourceUtils.doGetConnection(databaseConnectionFactory.hikariDataSource))
 				.unwrap(SQLServerConnection.class);
 				SQLServerPreparedStatement pStmt = (SQLServerPreparedStatement) conn.prepareStatement(sql.toString())) {
 
@@ -60,6 +54,7 @@ public class DatabaseConnection extends JdbcTemplate {
 		System.out.println("count: " + Arrays.stream(result).sum());
 	}
 
+    @Override
     public void doTaiDatabaseConnection(List<TaiSMSourLogModel> models) {
         int[] result = null;
         StringBuilder sql = new StringBuilder();
@@ -67,7 +62,7 @@ public class DatabaseConnection extends JdbcTemplate {
         sql.append(" INSERT INTO LOG.dbo.Tai_SMSourLog (Date, Time, ThreadID, SerialNo, Mid, ExecutionTime) ");
         sql.append(" VALUES (?, ? ,? ,? ,? ,?) ");
 
-        try (Connection conn = (DataSourceUtils.doGetConnection(this.hikariDataSource))
+        try (Connection conn = (DataSourceUtils.doGetConnection(databaseConnectionFactory.hikariDataSource))
                 .unwrap(SQLServerConnection.class);
              SQLServerPreparedStatement pStmt = (SQLServerPreparedStatement) conn.prepareStatement(sql.toString())) {
             
@@ -90,6 +85,7 @@ public class DatabaseConnection extends JdbcTemplate {
         System.out.println("count: " + Arrays.stream(result).sum());
     }
     
+    @Override
     public int batchInsertTvpTest(List<TvpModel> tvpModels) {
         int result = -1;
         DataSource ds = null;
@@ -104,7 +100,7 @@ public class DatabaseConnection extends JdbcTemplate {
         sql.append(" SELECT Data, Stamp FROM ? ");
         
         try {
-            ds = this.hikariDataSource;
+            ds = databaseConnectionFactory.hikariDataSource;
             conn = DataSourceUtils.doGetConnection(ds);
             nativeConn = conn.unwrap(SQLServerConnection.class);
             
@@ -134,14 +130,16 @@ public class DatabaseConnection extends JdbcTemplate {
         return result;
     }
 
+    @Override
     public void batchInsertSoftwareInfoData(List<SoftwareInfoModel> softwareInfoModels) {
         int[] result = null;
         StringBuilder sql = new StringBuilder();
 
-        sql.append(" INSERT INTO DBexp.dbo.SoftwareInfo(Ip, Name, Version, Description) ");
+        //SoftwareInfo
+        sql.append(" INSERT INTO DBexp.dbo.SoftwareInfo_test(Ip, Name, Version, Description) ");
         sql.append(" VALUES (?, ? ,? ,?) ");
 
-        try (Connection conn = (DataSourceUtils.doGetConnection(this.hikariDataSource))
+        try (Connection conn = (DataSourceUtils.doGetConnection(databaseConnectionFactory.hikariDataSource))
                 .unwrap(SQLServerConnection.class);
              SQLServerPreparedStatement pStmt = (SQLServerPreparedStatement) conn.prepareStatement(sql.toString())) {
 
@@ -162,30 +160,12 @@ public class DatabaseConnection extends JdbcTemplate {
         System.out.println("count: " + Arrays.stream(result).sum());
     }
 
-    public DatabaseConnection(String ip, String port, String dbName, String user, String passWord) {
-        this.ip = ip;
-        this.port = port;
-        this.dbName = dbName;
-        this.user = user;
-        this.passWord = passWord;
-        DatabaseConnectionConfig();
+    public DatabaseConnectionFactory getDatabaseConnectionFactory() {
+        return databaseConnectionFactory;
     }
 
-    private void DatabaseConnectionConfig() {
-        if (hikariConfig == null) {
-            hikariConfig = new HikariConfig();            
-        }
-        StringBuilder jdbcUrl = new StringBuilder();
-        jdbcUrl.append("jdbc:sqlserver://").append(ip).append(":").append(port).append(";");
-        jdbcUrl.append("databaseName=").append(dbName).append(";");
-        jdbcUrl.append("applicationName=SmSourLogExample;sendStringParametersAsUnicode=false;ColumnEncryptionSetting=Enabled;");
-
-        hikariConfig.setJdbcUrl(jdbcUrl.toString());
-        hikariConfig.setUsername(this.user);
-        hikariConfig.setPassword(this.passWord);
-
-        hikariDataSource = new HikariDataSource(hikariConfig);
-
+    @Override
+    public void setDatabaseConnectionFactory(DatabaseConnectionFactory databaseConnectionFactory) {
+        this.databaseConnectionFactory = databaseConnectionFactory;
     }
-
 }

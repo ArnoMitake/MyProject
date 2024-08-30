@@ -1,4 +1,4 @@
-package mycode.main.Example;
+package mycode.main.Test;
 
 import org.springframework.util.StopWatch;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class MultiThreadFileWriter {
+public class MultiThreadFileWriterTest {
 
     private static final String FILE_PATH = "Camels_output2.txt";
     private static final String IMAGE_FILE_PATH = "\\\\\\wsl$\\Ubuntu\\home\\arno\\gw_mms_att\\Camels_image_output_";

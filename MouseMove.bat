@@ -6,4 +6,4 @@ cd D:\Program Files\SourceTree\Java_Project\Github\MyProject\target\classes
 
 cls
 
-java MouseMoveExample
+java mycode.main.Test.MouseMoveTest

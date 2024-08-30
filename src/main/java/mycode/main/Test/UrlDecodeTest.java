@@ -1,4 +1,4 @@
-package mycode.main.Example;
+package mycode.main.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;

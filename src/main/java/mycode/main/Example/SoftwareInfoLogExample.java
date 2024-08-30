@@ -1,4 +1,4 @@
-package mycode.main.LogTools;
+package mycode.main.Example;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,14 +8,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
 import mycode.dao.DatabaseConnection;
+import mycode.dao.DatabaseConnectionFactory;
+import mycode.dao.Impl.DatabaseConnectionImpl;
+import mycode.model.PropertiesModel;
 import mycode.model.SoftwareInfoModel;
+import mycode.utils.PropertiesUtil;
 
 /**
  * 資料來源參考: 主機上安裝軟體清查
@@ -33,56 +37,36 @@ import mycode.model.SoftwareInfoModel;
  * 資料用正規 \s{2,} 區分，已兩個空白切字串
  */
 public class SoftwareInfoLogExample {
-    private static String keyWord;
-    private static String folderPath;
-    private static String DB_ip;
-    private static String DB_port;
-    private static String DB_dbname;
-    private static String DB_user;
-    private static String DB_num;
+    private static DatabaseConnectionImpl dao;
+    private static PropertiesModel propertiesModel;
 
     static {
-        Properties prop = new Properties();
-        try (FileInputStream input = new FileInputStream("conf/AppSettings.properties");
-             InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8)) {
-            prop.load(reader);
-//            keyWord = prop.getProperty("safeware_keyWord");
-            folderPath = prop.getProperty("safeware_folderPath");
-            DB_ip = prop.getProperty("safeware_DBexp_DB_ip");
-            DB_port = prop.getProperty("safeware_DBexp_DB_port");
-            DB_dbname = prop.getProperty("safeware_DBexp_DB_dbname");
-            DB_user = prop.getProperty("safeware_DBexp_DB_user");
-            DB_num = prop.getProperty("safeware_DBexp_DB_num");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        propertiesModel = new PropertiesModel();
+        PropertiesUtil.getInstance().getSoftwareInfoLogProperties(propertiesModel);
+        PropertiesUtil.getInstance().getDBexpProperties(propertiesModel);
+        System.out.println(String.format("[PropertiesModel:%s]", propertiesModel));
+        dao = new DatabaseConnection();
+        dao.setDatabaseConnectionFactory(
+                new DatabaseConnectionFactory(
+                        propertiesModel.getDb_ip(), propertiesModel.getDb_port(), propertiesModel.getDb_dbname(),
+                        propertiesModel.getDb_user(), propertiesModel.getDb_num()));
     }
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        DatabaseConnection dao = new DatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num);
-        File file = new File(folderPath);
-        List<File> filePaths = new ArrayList<>();
+        File file = new File(propertiesModel.getFolderPath());
         List<SoftwareInfoModel> softwareInfoModels = new ArrayList<>();
 
         StopWatch sw = new StopWatch();
         sw.start();
         System.out.println(" SoftwareInfoLogExample Start >>>>>>>>>>>>>>>> ");
-        
-        getLogPath(file, filePaths);        
 
-        checkFileNameToParse(filePaths, softwareInfoModels);
+        checkFileNameToParse(Arrays.asList(file.listFiles()), softwareInfoModels);
         
         dao.batchInsertSoftwareInfoData(softwareInfoModels);
         
         System.out.println(" SoftwareInfoLogExample End <<<<<<<<<<<<<<<<< ");
         sw.stop();
         System.out.println("SoftwareInfoLogExample run time :" + sw.getTime() + "ms");        
-    }
-    
-    public static void getLogPath(File folder, List<File> filePaths) {
-        for(File file : folder.listFiles()) {
-            filePaths.add(file);
-        }
     }
     
     public static void checkFileNameToParse(List<File> filePaths, List<SoftwareInfoModel> softwareInfoModels) throws IOException {
@@ -150,8 +134,8 @@ public class SoftwareInfoLogExample {
                     } else {
                         System.out.println(String.format("[line:%s] is null", line));
                     }
-                }catch (Exception e) {
-                    System.out.println(String.format("第%s行 >> [line:%s]-error:%s",lineNumber,  line, e.getMessage()));
+                } catch (Exception e) {
+                    System.out.println(String.format("第%s行 >> [line:%s]-error:%s", lineNumber, line, e.getMessage()));
                     e.printStackTrace();
                 } finally {
                     lineNumber++;

@@ -1,4 +1,4 @@
-package mycode.main.LogTools;
+package mycode.main.Example;
 
 import org.apache.commons.lang3.time.StopWatch;
 
@@ -11,40 +11,31 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mycode.dao.DatabaseConnection;
+import mycode.dao.DatabaseConnectionFactory;
+import mycode.dao.Impl.DatabaseConnectionImpl;
+import mycode.model.PropertiesModel;
 import mycode.model.TaiSMSourLogModel;
+import mycode.utils.PropertiesUtil;
 
 public class TAISourLogExample {
     private static String regex = "SMSourTAI(\\d{4})";
-    private static String keyWord;
-    private static String folderPath;
-    private static String DB_ip;
-    private static String DB_port;
-    private static String DB_dbname;
-    private static String DB_user;
-    private static String DB_num;
-    private static DatabaseConnection dao = null;
+    private static DatabaseConnectionImpl dao;
+    private static PropertiesModel propertiesModel;
 
     static {
-        Properties prop = new Properties();
-        try (FileInputStream input = new FileInputStream("conf/AppSettings.properties");
-             InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8)) {
-            prop.load(reader);
-            keyWord = prop.getProperty("tai_keyWord");
-            folderPath = prop.getProperty("tai_folderPath");
-            DB_ip = prop.getProperty("tai_DB_ip");
-            DB_port = prop.getProperty("tai_DB_port");
-            DB_dbname = prop.getProperty("tai_DB_dbname");
-            DB_user = prop.getProperty("tai_DB_user");
-            DB_num = prop.getProperty("tai_DB_num");
-            dao = new DatabaseConnection(DB_ip, DB_port, DB_dbname, DB_user, DB_num);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        propertiesModel = new PropertiesModel();
+        PropertiesUtil.getInstance().getTAISourLogProperties(propertiesModel);
+        PropertiesUtil.getInstance().getDBLOGProperties(propertiesModel);
+        System.out.println(String.format("[PropertiesModel:%s]", propertiesModel));
+        dao = new DatabaseConnection();
+        dao.setDatabaseConnectionFactory(
+                new DatabaseConnectionFactory(
+                        propertiesModel.getDb_ip(), propertiesModel.getDb_port(), propertiesModel.getDb_dbname(),
+                        propertiesModel.getDb_user(), propertiesModel.getDb_num()));
     }
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -52,8 +43,11 @@ public class TAISourLogExample {
         sw.start();
         System.out.println(" SmSourLogExample Start >>>>>>>>>>>>>>>> ");
         List<TaiSMSourLogModel> models = new ArrayList<>();
-        parseFolder(new File(folderPath), models);
+        
+        parseFolder(new File(propertiesModel.getFolderPath()), models);
+        
         dao.doTaiDatabaseConnection(models);
+        
         System.out.println(" SmSourLogExample End <<<<<<<<<<<<<<<<< ");
         sw.stop();
         System.out.println("SmSourLogExample run time :" + sw.getTime() + "ms");
@@ -83,7 +77,7 @@ public class TAISourLogExample {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (line.contains(keyWord)) {
+                if (line.contains(propertiesModel.getKeyWord())) {
                     TaiSMSourLogModel model = new TaiSMSourLogModel();
                     String[] parts = line.split("\\|");
                     String date = parts[0].split(" ")[0];

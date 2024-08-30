@@ -1,4 +1,4 @@
-package mycode.main.LogTools;
+package mycode.main.Example;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -51,8 +51,8 @@ import java.util.regex.Pattern;
  * Log請維運幫你抓
  */
 // reference MikateLog folder
-public class MitakeLogTools {
-	private final static Logger logger = LoggerFactory.getLogger(MitakeLogTools.class);
+public class MitakeLogExample {
+	private final static Logger logger = LoggerFactory.getLogger(MitakeLogExample.class);
 	private static Pattern PATTERN_FILTER_FILE = Pattern.compile("\\.zip");// 排除.zip檔
 	private static Pattern PATTERN_KEYWORD = Pattern.compile("username=(.*?),|dstaddr=(.*?),");// 取出關鍵字
 	private static final String FOLDER_PATH = "D:\\Program Files\\SourceTree\\Java_Project\\Github\\MyProject\\MitakeLog\\SMSDB\\ApiWorkLog";// 指定目錄

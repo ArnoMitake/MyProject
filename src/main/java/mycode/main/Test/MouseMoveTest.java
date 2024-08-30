@@ -1,4 +1,4 @@
-package mycode.main.Example;
+package mycode.main.Test;
 
 import java.awt.Robot;
 import java.time.Duration;
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
-public class MouseMoveExample {
+public class MouseMoveTest {
     private static final int MOVE_DELAY = 15000;
     private static final int AREA_WIDTH = 800;
     private static final int AREA_HEIGHT = 600;

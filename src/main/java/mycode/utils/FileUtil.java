@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+//todo 暫時沒想法怎分離出 Log 系列的 Example
 public class FileUtil {
     private static FileUtil fileUtil;
     
