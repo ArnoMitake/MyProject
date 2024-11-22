@@ -23,7 +23,7 @@ import mycode.utils.PropertiesUtil;
 
 /**
  * 資料來源參考1: 主機上安裝軟體清查
- * 資料來源參考2: D:\工作事項\20241023_ISO_軟體清單
+ * 實作資料來源參考2: D:\工作事項\20241023_ISO_軟體清單
  * 請協助在34開一個Table將下列各主機軟體清單匯入，
  * 軟體清單內容有兩種格式，一種是windows，一種是Ubuntu，
  *     Table所需欄位如下：
@@ -35,7 +35,7 @@ import mycode.utils.PropertiesUtil;
  * 開發事項:
  * 目前開在 .34 DBexp -> SoftwareInfo
  * 用檔名區分 OS {list:windows, dpkg:ubuntu}
- * 資料用正規 \s{2,} 區分，已兩個空白切字串
+ * 資料用正規 \s{2,} 區分，以兩個空白切字串
  */
 public class SoftwareInfoLogExample {
     private static DatabaseConnectionImpl dao;
@@ -69,7 +69,7 @@ public class SoftwareInfoLogExample {
 
             checkFileNameToParse(Arrays.asList(file.listFiles()), softwareInfoModels);
 
-            dao.batchInsertSoftwareInfoData(softwareInfoModels);
+//            dao.batchInsertSoftwareInfoData(softwareInfoModels);
 
             System.out.println(" SoftwareInfoLogExample End <<<<<<<<<<<<<<<<< ");
             sw.stop();
