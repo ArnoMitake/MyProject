@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/cache
+     http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<cache:annotation-driven />
+	<bean id="cacheBuilder" class="com.github.benmanes.caffeine.cache.Caffeine" />    
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+                <bean class="org.springframework.cache.caffeine.CaffeineCache">
+                    <constructor-arg index="0" value="Cache_Test" />
+                    <constructor-arg index="1" value="#{cacheBuilder.from('expireAfterAccess=5m,expireAfterWrite=5m').maximumWeight(1).weigher(CustomWeigher).removalListener(MyRemovalListener).build()}" />
+                </bean>
+
+<!--    範例            -->
+<!--				<bean class="org.springframework.cache.caffeine.CaffeineCache">-->
+<!--					<constructor-arg index="0" value="MsgDataWhiteList_String_Cache" />-->
+<!--					<constructor-arg index="1" value="#{cacheBuilder.from('expireAfterAccess=5m,expireAfterWrite=5m').build()}" />-->
+<!--				</bean>-->
+<!--				<bean class="org.springframework.cache.caffeine.CaffeineCache">-->
+<!--					<constructor-arg index="0" value="MsgDataWhiteList_Pattern_Cache" />-->
+<!--					<constructor-arg index="1" value="#{cacheBuilder.from('expireAfterAccess=5m,expireAfterWrite=5m').build()}" />-->
+<!--				</bean>-->
+			</set>
+		</property>
+	</bean>
+
+</beans>

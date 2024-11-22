@@ -40,7 +40,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        
         <dependency>
             <!-- jsoup HTML parser library @ https://jsoup.org/ -->
             <groupId>org.jsoup</groupId>
@@ -160,7 +160,7 @@
             <artifactId>spring-core</artifactId>
             <version>${spring4.version}</version>
         </dependency>
-
+        
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
@@ -172,13 +172,13 @@
             <artifactId>spring-context-support</artifactId>
             <version>${spring4.version}</version>
         </dependency>
-
+        
         <!-- CamelExample using -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
             <version>${apache.camel.version}</version>
-        </dependency>
+        </dependency>               
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jetty9</artifactId>
@@ -250,7 +250,7 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.ooxml.version}</version>
         </dependency>
-
+        
     </dependencies>
 
     <build>
