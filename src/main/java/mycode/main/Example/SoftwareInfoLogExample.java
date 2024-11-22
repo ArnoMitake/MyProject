@@ -22,7 +22,8 @@ import mycode.model.SoftwareInfoModel;
 import mycode.utils.PropertiesUtil;
 
 /**
- * 資料來源參考: 主機上安裝軟體清查
+ * 資料來源參考1: 主機上安裝軟體清查
+ * 資料來源參考2: D:\工作事項\20241023_ISO_軟體清單
  * 請協助在34開一個Table將下列各主機軟體清單匯入，
  * 軟體清單內容有兩種格式，一種是windows，一種是Ubuntu，
  *     Table所需欄位如下：
@@ -52,21 +53,29 @@ public class SoftwareInfoLogExample {
                         propertiesModel.getDb_user(), propertiesModel.getDb_num()));
     }
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
-        File file = new File(propertiesModel.getFolderPath());
-        List<SoftwareInfoModel> softwareInfoModels = new ArrayList<>();
-
-        StopWatch sw = new StopWatch();
-        sw.start();
-        System.out.println(" SoftwareInfoLogExample Start >>>>>>>>>>>>>>>> ");
-
-        checkFileNameToParse(Arrays.asList(file.listFiles()), softwareInfoModels);
+    public static void main(String[] args) throws IOException {
+        File file = null;
         
-        dao.batchInsertSoftwareInfoData(softwareInfoModels);
-        
-        System.out.println(" SoftwareInfoLogExample End <<<<<<<<<<<<<<<<< ");
-        sw.stop();
-        System.out.println("SoftwareInfoLogExample run time :" + sw.getTime() + "ms");        
+        //多個目錄
+        for (String folderPath : propertiesModel.getFolderPaths()) {
+            //ex. D:\\工作事項\\20241023_ISO_軟體清單 + \\ + 目錄
+            file = new File(propertiesModel.getFolderPath() + File.separator + folderPath);
+
+            List<SoftwareInfoModel> softwareInfoModels = new ArrayList<>();
+
+            StopWatch sw = new StopWatch();
+            sw.start();
+            System.out.println(" SoftwareInfoLogExample Start >>>>>>>>>>>>>>>> ");
+
+            checkFileNameToParse(Arrays.asList(file.listFiles()), softwareInfoModels);
+
+            dao.batchInsertSoftwareInfoData(softwareInfoModels);
+
+            System.out.println(" SoftwareInfoLogExample End <<<<<<<<<<<<<<<<< ");
+            sw.stop();
+            System.out.println("SoftwareInfoLogExample run time :" + sw.getTime() + "ms");
+        }
+  
     }
     
     public static void checkFileNameToParse(List<File> filePaths, List<SoftwareInfoModel> softwareInfoModels) throws IOException {

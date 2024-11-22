@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Properties;
 
 import mycode.model.PropertiesModel;
@@ -44,12 +45,23 @@ public class PropertiesUtil {
     public void getSoftwareInfoLogProperties(PropertiesModel propertiesModel) {
         try {
             getProperties();
-            propertiesModel.setFolderPath(prop.getProperty("software.folderPath"));
+            propertiesModel.setFolderPath(prop.getProperty("software.folderpath"));
+            propertiesModel.setFolderPaths(Arrays.asList(prop.getProperty("software.folderpaths").split(",")));
         }catch (FileNotFoundException fe) {
             fe.printStackTrace();
         }
     }
 
+    public void getCookieLogProperties(PropertiesModel propertiesModel) {
+        try {
+            getProperties();
+            propertiesModel.setKeyWord(prop.getProperty("cookielog.keyword"));
+            propertiesModel.setFolderPath(prop.getProperty("cookielog.folderpath"));
+//            propertiesModel.setFolderPaths(Arrays.asList(prop.getProperty("cookielog.folderpaths").split(",")));
+        }catch (FileNotFoundException fe) {
+            fe.printStackTrace();
+        }
+    }
 
     public void getDBLOGProperties(PropertiesModel propertiesModel) {
         try {

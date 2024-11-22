@@ -15,10 +15,32 @@
         <jettylib.version>9.3.11.v20160721</jettylib.version>
         <spring4.version>4.3.9.RELEASE</spring4.version>
         <apache.camel.version>2.20.0</apache.camel.version>
+        <poi.ooxml.version>5.2.3</poi.ooxml.version>
+        <caffeine.version>2.9.3</caffeine.version>
+        <fingerprintjs.version>v7.0.0-develop.0</fingerprintjs.version>
     </properties>
 
-
     <dependencies>
+        <!--   JOL 測量物件記憶體大小     -->
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+            <version>0.16</version>
+        </dependency>
+
+        <!-- cache  -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.errorprone</groupId>
+                    <artifactId>error_prone_annotations</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <dependency>
             <!-- jsoup HTML parser library @ https://jsoup.org/ -->
             <groupId>org.jsoup</groupId>
@@ -138,7 +160,7 @@
             <artifactId>spring-core</artifactId>
             <version>${spring4.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
@@ -150,13 +172,13 @@
             <artifactId>spring-context-support</artifactId>
             <version>${spring4.version}</version>
         </dependency>
-        
+
         <!-- CamelExample using -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
             <version>${apache.camel.version}</version>
-        </dependency>               
+        </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jetty9</artifactId>
@@ -222,7 +244,13 @@
             <artifactId>jetty-jmx</artifactId>
             <version>${jettylib.version}</version>
         </dependency>
-        
+        <!-- excel -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.ooxml.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -1,8 +1,11 @@
 package mycode.model;
 
+import java.util.List;
+
 public class PropertiesModel extends BaseModel {
     private String keyWord;
     private String folderPath;
+    private List<String> folderPaths;
     private String db_ip;
     private String db_port;
     private String db_dbname;
@@ -23,6 +26,14 @@ public class PropertiesModel extends BaseModel {
 
     public void setFolderPath(String folderPath) {
         this.folderPath = folderPath;
+    }
+
+    public List<String> getFolderPaths() {
+        return folderPaths;
+    }
+
+    public void setFolderPaths(List<String> folderPaths) {        
+        this.folderPaths = folderPaths;
     }
 
     public String getDb_ip() {

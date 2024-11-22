@@ -135,8 +135,10 @@ public class DatabaseConnection extends JdbcTemplate implements DatabaseConnecti
         int[] result = null;
         StringBuilder sql = new StringBuilder();
 
-        //SoftwareInfo
-        sql.append(" INSERT INTO DBexp.dbo.SoftwareInfo_test(Ip, Name, Version, Description) ");
+        //SoftwareInfo -> 主機上安裝軟體清查
+        //SoftwareInfo_20241023 -> D:\工作事項\20241023_ISO_軟體清單
+        //SoftwareInfo_test -> 測試用
+        sql.append(" INSERT INTO DBexp.dbo.SoftwareInfo_20241023(Ip, Name, Version, Description) ");
         sql.append(" VALUES (?, ? ,? ,?) ");
 
         try (Connection conn = (DataSourceUtils.doGetConnection(databaseConnectionFactory.hikariDataSource))

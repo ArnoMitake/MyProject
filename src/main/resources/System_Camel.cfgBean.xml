@@ -8,6 +8,7 @@
          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
 	<import resource="System_Service.cfgBean.xml" />
+    <import resource="Cache_cfgBean.xml" />
 
 	<bean id="jetty" class="org.apache.camel.component.jetty9.JettyHttpComponent9">
 		<property name="threadPool">
@@ -40,6 +41,22 @@
             <from uri="jetty:http://0.0.0.0:7777/callbackurl?disableStreamCache=true&amp;traceEnabled=true"/>
             <bean ref="JettyServerHandler" method="handle"/>
         </route>
+
+        <route id="CTCB_DR_OLD_jettyMockServer">
+            <from uri="jetty:http://0.0.0.0:8080/mip/ReturnStatus?disableStreamCache=true&amp;traceEnabled=true"/>
+            <bean ref="CTCBJettyServerHandler" method="handle"/>
+        </route>
+
+        <route id="CTCB_DR_NEW_jettyMockServer">
+            <from uri="jetty:http://0.0.0.0:8081/smsdr/ReturnStatus?disableStreamCache=true&amp;traceEnabled=true"/>
+            <bean ref="CTCBJettyServerHandler" method="handle"/>
+        </route>
+
+        <!--   台哥測試     -->
+        <route id="TAI_jettyMockServer">
+            <from uri="jetty:http://0.0.0.0:9087/send.cgi?disableStreamCache=true&amp;traceEnabled=true"/>
+            <bean ref="CTCBJettyServerHandler" method="handle"/>
+        </route>
 		
 		<!-- 錯誤處理 -->
 		<route id="errorHandler">
@@ -47,5 +64,6 @@
 			<log message="錯誤訊息： ${exception.message}\r\n錯誤內容： ${exception.stacktrace}"
 				loggingLevel="ERROR" />
 		</route>
+        
 	</camelContext>
 </beans>
