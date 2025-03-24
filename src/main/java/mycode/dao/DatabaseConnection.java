@@ -141,7 +141,7 @@ public class DatabaseConnection extends JdbcTemplate implements DatabaseConnecti
         //SoftwareInfo_test -> 測試用
         //SoftwareInfo_20241122 -> 20241122 
 
-        sql.append(" INSERT INTO DBexp.dbo.SoftwareInfo_20241122(Ip, Name, Version, Description) ");
+        sql.append(" INSERT INTO DBexp.dbo.SoftwareInfo_test(Ip, Name, Version, Description) ");
         sql.append(" VALUES (?, ? ,? ,?) ");
 
         try (Connection conn = (DataSourceUtils.doGetConnection(databaseConnectionFactory.hikariDataSource))

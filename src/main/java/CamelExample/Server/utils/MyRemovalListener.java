@@ -1,4 +1,4 @@
-package mycode.main.Example;
+package CamelExample.Server.utils;
 
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.github.benmanes.caffeine.cache.RemovalListener;

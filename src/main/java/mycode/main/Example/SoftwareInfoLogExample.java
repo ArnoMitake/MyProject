@@ -3,13 +3,14 @@ package mycode.main.Example;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -69,7 +70,7 @@ public class SoftwareInfoLogExample {
 
             checkFileNameToParse(Arrays.asList(file.listFiles()), softwareInfoModels);
 
-//            dao.batchInsertSoftwareInfoData(softwareInfoModels);
+            dao.batchInsertSoftwareInfoData(softwareInfoModels);
 
             System.out.println(" SoftwareInfoLogExample End <<<<<<<<<<<<<<<<< ");
             sw.stop();

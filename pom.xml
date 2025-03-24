@@ -14,10 +14,11 @@
         <jsoup.version>1.16.1</jsoup.version>
         <jettylib.version>9.3.11.v20160721</jettylib.version>
         <spring4.version>4.3.9.RELEASE</spring4.version>
-        <apache.camel.version>2.20.0</apache.camel.version>
+        <camel.version>2.20.0</camel.version>
         <poi.ooxml.version>5.2.3</poi.ooxml.version>
         <caffeine.version>2.9.3</caffeine.version>
         <fingerprintjs.version>v7.0.0-develop.0</fingerprintjs.version>
+        <java-websocket.version>1.6.0</java-websocket.version>
     </properties>
 
     <dependencies>
@@ -78,17 +79,22 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>${apache.camel.version}</version> <!-- 版本根據實際需求調整 -->
+            <version>${camel.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ftp</artifactId>
-            <version>${apache.camel.version}</version> <!-- 版本根據實際需求調整 -->
+            <version>${camel.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-quartz2</artifactId>
-            <version>${apache.camel.version}</version>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jetty9</artifactId>
+            <version>${camel.version}</version>
         </dependency>
 
         <dependency>
@@ -177,12 +183,12 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
-            <version>${apache.camel.version}</version>
+            <version>${camel.version}</version>
         </dependency>               
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jetty9</artifactId>
-            <version>${apache.camel.version}</version>
+            <version>${camel.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -250,7 +256,14 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.ooxml.version}</version>
         </dependency>
-        
+
+        <!-- https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket -->
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>${java-websocket.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

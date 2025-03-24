@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:constant id="sessionsMode" static-field="org.eclipse.jetty.servlet.ServletContextHandler.SESSIONS" />
+
+
+    <!-- SSL Context Factory -->
+    <bean id="sslContextFactory" class="org.eclipse.jetty.util.ssl.SslContextFactory">
+        <property name="keyStorePath" value=".\\conf\\LmAPI.jks" />
+        <property name="keyStorePassword" value="86136982" />
+        <property name="keyManagerPassword" value="86136982" />
+    </bean>
+
+    <!-- HTTPS Connector -->
+    <bean id="httpsConnector" class="org.eclipse.jetty.server.ServerConnector">
+        <constructor-arg index="0" ref="jettyServer" />
+        <constructor-arg index="1">
+            <bean class="org.eclipse.jetty.server.SslConnectionFactory">
+                <constructor-arg value="http/1.1" />
+                <constructor-arg ref="sslContextFactory" />
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="2" ref="httpsConfig" />
+        <property name="port" value="6666" />
+    </bean>
+
+    <!-- HTTPS Configuration -->
+    <bean id="httpsConfig" class="org.eclipse.jetty.server.HttpConfiguration" />
+
+    <!-- Jetty Server -->
+    <bean id="jettyServer" class="org.eclipse.jetty.server.Server">
+        <property name="connectors">
+            <list>
+                <ref bean="httpsConnector" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- Servlet Context Handler -->
+    <bean id="servletContextHandler" class="org.eclipse.jetty.servlet.ServletContextHandler">
+        <constructor-arg value="1" />
+        <property name="contextPath" value="/" />
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="jettyServer" />
+        <property name="targetMethod" value="setHandler" />
+        <property name="arguments">
+            <list>
+                <ref bean="servletContextHandler" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- Start Jetty Server -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="jettyServer" />
+        <property name="targetMethod" value="start" />
+    </bean>
+
+</beans>

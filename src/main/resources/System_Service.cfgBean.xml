@@ -5,18 +5,22 @@
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-    
-    <bean id="JettyServerHandler" class="CamelExample.Server.handler.JettyServerHandler" >
-        <property name="cacheExample" ref="CacheExample"/>
+
+    <bean id="JettyHttpServerHandler" class="CamelExample.Server.handler.JettyHttpServerHandler" >
+        <property name="cacheUtil" ref="CacheUtil"/>
     </bean>
-    
+
+    <bean id="JettyHttpsServerHandler" class="CamelExample.Server.handler.JettyHttpsServerHandler" >
+        <property name="cacheUtil" ref="CacheUtil"/>
+    </bean>
+
     <bean id="CTCBJettyServerHandler" class="CamelExample.Server.CTCB.handler.CTCBJettyServerHandler" />
 
 
-    <bean id="CacheExample" class="mycode.main.Example.CacheExample" />
+    <bean id="CacheUtil" class="CamelExample.Server.utils.CacheUtil" />
 
-    <bean id="MyRemovalListener" class="mycode.main.Example.MyRemovalListener" />
+    <bean id="MyRemovalListener" class="CamelExample.Server.utils.MyRemovalListener" />
 
-    <bean id="CustomWeigher" class="mycode.main.Example.CustomWeigher" />
+    <bean id="CustomWeigher" class="CamelExample.Server.utils.CustomWeigher" />
     
 </beans>

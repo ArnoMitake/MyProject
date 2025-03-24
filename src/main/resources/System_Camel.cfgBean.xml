@@ -7,7 +7,10 @@
          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<import resource="System_Service.cfgBean.xml" />
+    <!-- todo 待研究語法   -->
+<!--    <import resource="jetty_https.xml" />-->
+    
+    <import resource="System_Service.cfgBean.xml" />
     <import resource="Cache_cfgBean.xml" />
 
 	<bean id="jetty" class="org.apache.camel.component.jetty9.JettyHttpComponent9">
@@ -26,7 +29,7 @@
 	</bean>
 
 
-	<camelContext id="MockServer" xmlns="http://camel.apache.org/schema/spring">
+    <camelContext id="MockServer" xmlns="http://camel.apache.org/schema/spring">
 
 		<!-- Common Exception -->
 		<onException>
@@ -38,9 +41,14 @@
 		</onException>
         
         <route id="jettyMockServer">
-            <from uri="jetty:http://0.0.0.0:7777/callbackurl?disableStreamCache=true&amp;traceEnabled=true"/>
-            <bean ref="JettyServerHandler" method="handle"/>
+            <from uri="jetty:http://10.3.2.114:7777/callbackurl?disableStreamCache=true&amp;traceEnabled=true"/>
+            <bean ref="JettyHttpServerHandler" method="handle"/>
         </route>
+
+<!--        <route id="jettysMockServer">-->
+<!--            <from uri="jetty:https://10.3.2.114:6666/fingerprint?disableStreamCache=true&amp;traceEnabled=true&amp;sslContextParameters=#sslContext"/>-->
+<!--            <bean ref="JettyHttpsServerHandler" method="handle"/>-->
+<!--        </route>-->
 
         <route id="CTCB_DR_OLD_jettyMockServer">
             <from uri="jetty:http://0.0.0.0:8080/mip/ReturnStatus?disableStreamCache=true&amp;traceEnabled=true"/>
@@ -52,6 +60,11 @@
             <bean ref="CTCBJettyServerHandler" method="handle"/>
         </route>
 
+		<route id="CTCB_MO_jettyMockServer">
+			<from uri="jetty:http://0.0.0.0:8081/smsdr/ReplyMsg?disableStreamCache=true&amp;traceEnabled=true"/>
+			<bean ref="CTCBJettyServerHandler" method="handle"/>
+		</route>
+		
         <!--   台哥測試     -->
         <route id="TAI_jettyMockServer">
             <from uri="jetty:http://0.0.0.0:9087/send.cgi?disableStreamCache=true&amp;traceEnabled=true"/>

@@ -13,10 +13,12 @@ import CamelExample.Server.CTCB.model.CTCBResponseModel;
 import mycode.model.BaseModel;
 
 /**
- * 短訊:
+ * Dr短訊:
  * http://127.0.0.1:8080/mip/ReturnStatus?vendor=1&msgid=%30%32%30%32%34%30%39%31%30%20&status=2&updatetime=20240910091712&otp=N 
- * 長訊:
+ * Dr長訊:
  * http://127.0.0.1:8080/mip/ReturnStatus?vendor=1&msgid=%23%32%30%32%34%30%39%31%30%20&status=2&updatetime=20240910091712&otp=N&sectionCnt=2&sec1=2&sec2=2
+ * Mo:
+ * http://127.0.0.1:8081/smsdr/ReplyMsg?vendor=1&telno=0911111111&code=168168&content=MoTest2&cust_recv_time=20250214155904
  */
 public class CTCBJettyServerHandler extends BaseModel {
     
@@ -44,7 +46,15 @@ public class CTCBJettyServerHandler extends BaseModel {
                     requestModel.setSectionCnt(values[0]);
                 } else if (StringUtils.trimToEmpty(paramName).startsWith("sec")) {
                     secMap.put(paramName, values[0]);
-                }
+                } else if ("telno".equals(paramName)) {
+					requestModel.setTelno(values[0]);
+				} else if ("code".equals(paramName)) {
+					requestModel.setCode(values[0]);
+				} else if ("content".equals(paramName)) {
+					requestModel.setContent(values[0]);
+				} else if ("cust_recv_time".equals(paramName)) {
+					requestModel.setCust_recv_time(values[0]);
+				}
             }
         }
 

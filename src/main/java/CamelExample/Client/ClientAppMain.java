@@ -18,7 +18,7 @@ public class ClientAppMain {
     
     //STG
 //    static String url = "https://stgsmsapi.mitake.com.tw:8102/api/mtk/SmSend?username={0}&password={1}&dstaddr={2}&CharsetURL={3}&smbody={4}";
-    static String url = "https://10.3.2.116:7414/SmSend?dstaddr=0900000000&smbody=20241118_test&username=MKT&password=12345&CharsetURL=UTF8";
+    static String url = "https://10.3.2.116:6667/SmSend?dstaddr=0900000000&smbody=20241118_test&username=MKT&password=12345&CharsetURL=UTF8";
     static String username = "Arno";
     static String password = "ArnoABCD";
     

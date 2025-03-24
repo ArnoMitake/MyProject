@@ -12,7 +12,11 @@ public class CTCBRequestModel extends BaseModel {
 	private String otp;
 	private String sectionCnt;
 	private Map<String, String> sec;
-
+	private String telno;
+	private String code;
+	private String content;
+	private String cust_recv_time;
+	
     public String getVendor() {
         return vendor;
     }
@@ -68,4 +72,36 @@ public class CTCBRequestModel extends BaseModel {
     public void setSec(Map<String, String> sec) {
         this.sec = sec;
     }
+
+	public String getTelno() {
+		return telno;
+	}
+
+	public void setTelno(String telno) {
+		this.telno = telno;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getCust_recv_time() {
+		return cust_recv_time;
+	}
+
+	public void setCust_recv_time(String cust_recv_time) {
+		this.cust_recv_time = cust_recv_time;
+	}
 }
